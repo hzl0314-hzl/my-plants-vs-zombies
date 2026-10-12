@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>打地鼠小游戏</title>
+<style>
+body { background: #2d5016; display: flex; flex-direction: column; align-items: center; font-family: Arial; }
+h1 { color: #fff; }
+#score { color: #ff0; font-size: 28px; margin: 10px; }
+.grid { display: grid; grid-template-columns: repeat(3, 120px); gap: 15px; margin-top: 20px; }
+.hole { width: 120px; height: 120px; background: #5c3a1e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 60px; cursor: pointer; }
+.hole:active { transform: scale(0.95); }
+#start { font-size: 20px; padding: 10px 30px; margin: 10px; cursor: pointer; }
+</style>
+</head>
+<body>
+<h1>🔨 打地鼠</h1>
+<div id="score">得分: 0</div>
+<button id="start" onclick="startGame()">开始游戏</button>
+<div class="grid" id="grid"></div>
+<script>
+let score = 0, timer = null, playing = false;
+const holes = [];
+for (let i = 0; i < 9; i++) {
+  const h = document.createElement('div');
+  h.className = 'hole';
+  h.textContent = '🕳️';
+  h.onclick = () => { if (h.textContent === '🐹') { score++; document.getElementById('score').textContent = '得分: ' + score; h.textContent = '🕳️'; } };
+  document.getElementById('grid').appendChild(h);
+  holes.push(h);
+}
+function startGame() {
+  if (playing) return;
+  playing = true; score = 0;
+  document.getElementById('score').textContent = '得分: 0';
+  timer = setInterval(() => {
+    holes.forEach(h => h.textContent = '🕳️');
+    const r = Math.floor(Math.random() * 9);
+    holes[r].textContent = '🐹';
+  }, 800);
+  setTimeout(() => { clearInterval(timer); playing = false; alert('时间到！最终得分: ' + score); }, 30000);
+}
+</script>
+</body>
+</html>
